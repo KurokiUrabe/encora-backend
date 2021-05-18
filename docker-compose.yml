@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  web:
+    container_name: backend
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/src
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+      WAIT_HOSTS: autocompletedb:27017
+  autocompletedb:
+    image: mongo
+    container_name: autocomplete
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ~/mongodb/autocomplete:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
